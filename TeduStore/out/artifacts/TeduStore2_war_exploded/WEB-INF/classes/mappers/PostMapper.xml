@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper 
+	namespace="cn.tedu.post.mapper.PostMapper">
+	<!-- 利用 result map 进行自定义映射 -->
+	<resultMap id="postMap" 
+		type="cn.tedu.post.bean.Post" >
+		<!-- 将查询结果的行自定义映射到bean对象
+		id, u_id, content-->
+		<id column="id" property="id"/>
+		<result column="content" property="content"/>
+		<!-- association 关联(映射引用类型) -->
+		<association property="user" 
+			javaType="cn.tedu.post.bean.User">
+			<id column="u_id" property="id"/>
+			<result column="name" property="name"/>
+		</association>
+		<!-- 集合映射, 利用另外的一个select查询
+		获取信息 -->
+		<collection property="list"
+			select="getCommentsByPostId"
+			column="id">
+		</collection>
+	</resultMap>
+	
+	<select id="getCommentsByPostId"
+		resultType="cn.tedu.post.bean.Comment">
+		select 
+			id, p_id, name, comment
+		from 
+			Comment
+		where 
+			p_id=#{id}
+	</select>
+
+	<select id="getPostById" 
+		resultMap="postMap">
+		select 
+			p.id, u_id, content, u.name 
+		from 
+			Post p
+		left join
+			User u
+		on 
+			u.id = p.u_id
+		where 
+			p.id=#{id}
+	</select>
+
+</mapper>

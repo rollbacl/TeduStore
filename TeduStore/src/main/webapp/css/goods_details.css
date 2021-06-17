@@ -1,0 +1,44 @@
+.right_detail h5.title {
+	float: left;
+	width: 50px;
+	height: 56px;
+	font-size: 16px;
+	color: #333;
+	font-weight: normal;
+}
+
+.right_detail div.avenge {
+	float: left;
+}
+
+.right_detail div.avenge ul {
+	border-width: 0px;
+}
+
+.right_detail div.avenge ul li {
+	
+}
+
+.right_detail div.avenge ul li a {
+	display: block;
+	border: 1px solid #666;
+	font-size: 16px;
+	margin: 0 5px 5px 0;
+	padding: 10px 6px;
+	color: #333;
+}
+
+.right_detail div.avenge ul li a:hover {
+	background: #d8d8d8;
+}
+
+.right_detail div.avenge ul li a.current {
+	color: #0AA1ED;
+	border: 1px solid #0AA1ED;
+}
+
+
+
+
+
+

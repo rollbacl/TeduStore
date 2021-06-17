@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper 
+	namespace="cn.tedu.post.mapper.LogMapper">
+	<select id="getLogByUserId"
+		resultType="cn.tedu.post.bean.Log">
+		select 
+			id,
+			u_id as userId,
+			log
+		from 
+			Log${month}
+		where
+			u_id = #{userId}
+		 
+	</select>
+</mapper>
+
+

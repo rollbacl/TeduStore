@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper 
+	namespace="cn.tedu.store.mapper.GoodsCategoryMapper">
+
+	<!-- 根据父级分类ID获取商品分类列表 -->
+	<!-- List<GoodsCategory> 
+		getGoodsCategoryListByParentId(
+			@Param("parentId") Integer parentId,
+			@Param("offset") Integer offset,
+			@Param("count") Integer count); -->
+	<select id="getGoodsCategoryListByParentId"
+		resultType="cn.tedu.store.bean.GoodsCategory">
+		SELECT 
+			id, 
+			parent_id		AS	parentId,
+			name,
+			status,
+			sort_order		AS	sortOrder,
+			is_parent		AS isParent,
+			created_user	AS	createdUser,
+			created_time	AS	createdTime,
+			modified_user	AS	modifiedUser,
+			modified_time	AS modifiedTime 
+		FROM 
+			t_goods_category
+		WHERE 
+			parent_id=#{parentId} 
+		<if test="offset != null">
+		LIMIT #{offset},#{count}
+		</if>
+	</select>
+
+</mapper>

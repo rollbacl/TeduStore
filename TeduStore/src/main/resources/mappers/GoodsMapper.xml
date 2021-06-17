@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper 
+	namespace="cn.tedu.store.mapper.GoodsMapper">
+
+	<!-- 根据商品分类获取商品列表 -->
+	<!-- List<Goods> getGoodsListByCategoryId(
+			@Param("categoryId")	Integer categoryId, 
+			@Param("orderBy")		String orderBy, 
+			@Param("offset")		Integer offset, 
+			@Param("count")		Integer count); -->
+	<select id="getGoodsListByCategoryId"
+		resultType="cn.tedu.store.bean.Goods">
+		SELECT 
+			id, 
+			category_id		AS	categoryId,
+			title,
+			item_type		AS	itemType,
+			sell_point		AS	sellPoint,
+			price,
+			num,
+			barcode			AS barCode,
+			image,
+			status,
+			priority,
+			created_user	AS	createdUser,
+			created_time	AS	createdTime,
+			modified_user	AS	modifiedUser,
+			modified_time	AS modifiedTime 
+		FROM 
+			t_goods 
+		WHERE 
+			category_id=#{categoryId} 
+			AND status=1 AND num>0  
+		ORDER BY
+			${orderBy} 
+		LIMIT #{offset}, #{count}
+	</select>
+	
+	<!-- 获取某分类的商品的数量 -->
+	<!-- Integer getGoodsCountByCategoryId(
+			Integer categoryId) -->
+	<select id="getGoodsCountByCategoryId"
+		resultType="java.lang.Integer">
+		SELECT 
+			COUNT(id)
+		FROM 
+			t_goods
+		WHERE 
+			category_id=#{categoryId}
+	</select>
+	
+	<!-- 根据商品id获取商品信息 -->
+	<!-- Goods getGoodsById(Integer id) -->
+	<select id="getGoodsById"
+		resultType="cn.tedu.store.bean.Goods">
+		SELECT 
+			id, 
+			category_id		AS	categoryId,
+			title,
+			item_type		AS	itemType,
+			sell_point		AS	sellPoint,
+			price,
+			num,
+			barcode			AS barCode,
+			image,
+			status,
+			priority,
+			created_user	AS	createdUser,
+			created_time	AS	createdTime,
+			modified_user	AS	modifiedUser,
+			modified_time	AS modifiedTime 
+		FROM
+			t_goods
+		WHERE	
+			id=#{id}	
+			AND status=1 AND num>0  
+	</select>
+
+	<!-- 根据商品的item_type获取商品列表 -->
+	<!-- List<Goods> getGoodsListByItemType(
+			String itemType) -->
+	<select id="getGoodsListByItemType"
+		resultType="cn.tedu.store.bean.Goods">
+		SELECT 
+			id, title
+		FROM
+			t_goods
+		WHERE
+			item_type=#{itemType}	
+			AND status=1 AND num>0 
+	</select>
+
+
+
+
+
+
+
+
+</mapper>

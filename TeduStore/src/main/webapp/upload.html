@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+#view img, #list img{
+	width: 100px;
+	padding: 5px;
+	background-color: #ddd;
+	border: 1px solid #ccc;  
+	margin: 8px;
+}
+</style>
+</head>
+<body>
+	<h1>文件上载功能</h1>
+	<h2>表单文件上载</h2>
+	<p>表单提交3个关键点</p>
+	<ol>
+		<li>必须使用post方法提交表单</li>
+		<li>必须设置 enctype="multipart/form-data" </li>
+		<li>使用 input type="file"元素选择文件</li>		
+	</ol>
+	<form enctype="multipart/form-data" 
+		action="user/upload.do" method="POST">
+		图片: <input name="image" type="file"><br>
+		说明: <input name="memo" type="text"><br>	
+		<input type="submit" value="Send File">
+   </form>
+   
+   <h2>Ajax 文件上载</h2>
+   <div>
+   	图片: <input id="img" type="file" 
+   		multiple="multiple"> 
+   </div>
+   <div id="view"></div><!-- 显示选择的图片 -->
+   <div>
+   	说明: <input id="memo" type="text"> 
+   </div>
+   <input id="upload" type="button"
+   	 value="上载">  
+   	 
+   	 
+  	<h2>JQuery文件上载</h2>
+  	<div>
+  		文件:<input id="files" type="file"
+  			multiple="multiple">
+  	</div>
+  	<div>
+  		说明:<input id="comment" type="text">
+  	</div>
+  	<div id="list"></div><!-- 显示选择的文件 --> 
+   <input id="jquery-upload" type="button"
+   	 value="jQuery上载">   
+</body>
+<script type="text/javascript">
+//找到文件选择控制
+var img = document.getElementById("img");
+//绑定文件控件的选择事件 
+img.onchange=function(){
+	//获取当前控件上选择的文件列表
+	var files = this.files;
+	//找到预览区域
+	var view = document.getElementById("view");
+	//清空预览区域
+	view.innerHTML="";
+	//遍历选择的每个文件
+	for(var i=0; i<files.length; i++){
+		//生成每个图片文件的URL
+		var file=files[i];
+		var url=window.URL.createObjectURL(file);
+		//创建 <img> 元素
+		var im = new Image();
+		//将图片的URL赋值 img 元素的src属性,显示图片
+		im.src = url;
+		//将图片添加到预览区域
+		view.appendChild(im);
+	}
+};
+
+var upload = document.getElementById('upload');
+upload.onclick=function(){
+	//找到上载文件
+	var files = img.files;
+	if(files.length==0){
+		return;
+	}
+	//创建FormData对象
+	var frm = new FormData();
+	//将文件添加到formData对象中
+	for(var i=0; i<files.length; i++){
+		var file=files[i];
+		frm.append("images", file);
+	}
+	//将其他表单数据填充到formData中
+	var memo=document.getElementById('memo').value;
+	frm.append("memo", memo);
+	
+	//创建 XHR 对象, 将formData发送到服务器
+	var xhr=new XMLHttpRequest();
+	//绑定事件监听, 只处理完成后返回成功的结果
+	xhr.onreadystatechange=function(json){
+		if(xhr.readyState==4){//请求完成
+			if(xhr.status==200){//请求成功
+				alert(json);
+			}
+		}
+	}
+	//打开URL
+	var url='user/upload-images.do';
+	xhr.open('POST', url);
+	//发送数据
+	xhr.send(frm); 
+};
+
+</script>
+
+<script type="text/javascript"
+	src="js/jquery-3.1.1.min.js"></script>
+<script type="text/javascript">
+$('#files').change(function(){
+	var list=this.files;
+	$('#list').empty();
+	for(var i=0; i<list.length; i++){
+		var file=list[i];
+		var url=window.URL.createObjectURL(file);
+		var img=$('<img>').attr('src',url);
+		$('#list').append(img);
+	}
+});
+
+$('#jquery-upload').click(function(){
+	//找到所有文件
+	var files = $('#files')[0].files;
+	//创建 FormData 对象
+	var frm = new FormData();
+	for(var i=0; i<files.length; i++){
+		var file = files[i];
+		frm.append("images", file);
+	}
+	frm.append("memo", $('#comment').val());
+	//利用JQuery的ajax方法发送formData对象
+	$.ajax({
+		url:'user/upload-images.do',
+		type:'POST',
+		dataType: 'json',
+		data:frm, //ajax方法发送formData对象
+		processData: false,//JQuery不要出来frm数据
+		contentType: false,
+		success:function(json){
+			alert(json.message);
+		}
+	});
+});
+</script>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+

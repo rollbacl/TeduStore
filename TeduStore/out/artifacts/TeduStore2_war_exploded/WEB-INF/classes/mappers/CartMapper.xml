@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper 
+	namespace="cn.tedu.store.mapper.CartMapper">
+	
+	<!-- 将商品加入到购物车 -->
+	<!-- Integer add(Cart cart) -->
+	<insert id="add" 
+		parameterType="cn.tedu.store.bean.Cart"
+		useGeneratedKeys="true"
+		keyProperty="id">
+		INSERT INTO t_cart (
+			uid,
+			goods_id,
+			goods_image,
+			goods_title,
+			goods_item_type,
+			goods_price, 
+			goods_count,
+			created_user,
+			created_time,
+			modified_user,
+			modified_time
+		) VALUES (
+			#{uid},
+			#{goodsId},
+			#{goodsImage},
+			#{goodsTitle},
+			#{goodsItemType},
+			#{goodsPrice},
+			#{goodsCount},
+			#{createdUser},
+			#{createdTime},
+			#{modifiedUser},
+			#{modifiedTime}
+		)
+	</insert>
+	
+	<!-- 获取记录的数量 -->
+	<!-- Integer getRecordCount(
+		@Param("uid")		Integer uid, 
+		@Param("goodsId")	Integer goodsId) -->
+	<select id="getRecordCount"
+		resultType="java.lang.Integer">
+		SELECT 
+			COUNT(id) 
+		FROM 
+			t_cart 
+		WHERE 
+			uid=#{uid} AND goods_id=#{goodsId}	
+	</select>
+	
+	<!-- 调整购物车中某商品数量 -->
+	<!-- Integer changeGoodsCount(
+		@Param("uid")		Integer uid, 
+		@Param("goodsId")	Integer goodsId,
+		@Param("amount")	Integer amount) -->
+	<update id="changeGoodsCount">
+		UPDATE 
+			t_cart 
+		SET 
+			goods_count = goods_count + #{amount} 
+		WHERE 
+			uid=#{uid} AND goods_id=#{goodsId}
+	</update>
+	
+	<!-- 获取购物车中的商品列表 -->
+	<!-- List<Cart> getCartList(Integer uid) -->
+	<select id="getCartList"
+		resultType="cn.tedu.store.bean.Cart">
+		SELECT 
+			id,
+			uid,
+			goods_id				AS	goodsId,
+			goods_image			AS	goodsImage,
+			goods_title			AS	goodsTitle,
+			goods_item_type	AS	goodsItemType,
+			goods_price			AS	goodsPrice, 
+			goods_count			AS	goodsCount,
+			created_user		AS	createdUser,
+			created_time		AS	createdTime,
+			modified_user		AS	modifiedUser,
+			modified_time		AS	modifiedTime  
+		FROM 
+			t_cart 
+		WHERE 
+			uid=#{uid}	
+	</select>
+	
+	<!-- 根据id获取购物车的商品信息 -->
+	<!-- Cart getCartById(
+		Integer uid, Integer id) -->
+	<select id="getCartById"
+		resultType="cn.tedu.store.bean.Cart">
+		SELECT 
+			id,
+			uid,
+			goods_id				AS	goodsId,
+			goods_image			AS	goodsImage,
+			goods_title			AS	goodsTitle,
+			goods_item_type	AS	goodsItemType,
+			goods_price			AS	goodsPrice, 
+			goods_count			AS	goodsCount,
+			created_user		AS	createdUser,
+			created_time		AS	createdTime,
+			modified_user		AS	modifiedUser,
+			modified_time		AS	modifiedTime  
+		FROM 
+			t_cart 
+		WHERE 
+			uid=#{uid} AND id=#{id}	
+	</select>
+
+</mapper>
