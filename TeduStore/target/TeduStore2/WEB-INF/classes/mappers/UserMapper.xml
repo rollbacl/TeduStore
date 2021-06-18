@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper 
+	namespace="cn.tedu.store.mapper.UserMapper">
+
+	<!-- 增加用户数据 -->
+	<!-- void insert(User user) -->
+	<insert id="insert"
+		parameterType="cn.tedu.store.bean.User"
+		useGeneratedKeys="true"
+		keyProperty="id">
+		INSERT INTO t_user (
+			username, password,
+			phone, email, gender,
+			created_user, created_time,
+			modified_user, modified_time
+		) VALUES (
+			#{username}, #{password},
+			#{phone}, #{email}, #{gender},
+			#{createdUser}, #{createdTime},
+			#{modifiedUser}, #{modifiedTime}
+		);	
+	</insert>
+	
+	<!-- 根据用户名查询用户信息 -->
+	<!-- User findUserByUsername(
+		String username) -->
+	<select id="findUserByUsername"
+		resultType="cn.tedu.store.bean.User">
+		SELECT 
+			id,
+			username,
+			password,
+			phone,
+			email,
+			gender,
+			created_user	createdUser,
+			created_time	createdTime,
+			modified_user	modifiedUser,
+			modified_time	modifiedTime  
+		FROM 
+			t_user 
+		WHERE 
+			username=#{username}
+	</select>
+	
+	<!-- 根据用户ID查询用户信息 -->
+	<!-- User findUserById(
+		Integer id) -->
+	<select id="findUserById"
+		resultType="cn.tedu.store.bean.User">
+		SELECT 
+			id,
+			username,
+			password,
+			phone,
+			email,
+			gender,
+			created_user	createdUser,
+			created_time	createdTime,
+			modified_user	modifiedUser,
+			modified_time	modifiedTime  
+		FROM 
+			t_user 
+		WHERE 
+			id=#{id}
+	</select>
+	
+	<!-- 获取某电子邮箱对应的数据的数量 -->
+	<!-- Integer getRecordCountByEmail(
+		String email) -->
+	<select id="getRecordCountByEmail"
+		resultType="java.lang.Integer">
+		SELECT 
+			COUNT(id) 
+		FROM 
+			t_user 
+		WHERE 
+			email=#{email};
+	</select>
+	
+	<!-- 获取某手机号码对应的数据的数量 -->
+	<!-- Integer getRecordCountByPhone(
+		String email) -->
+	<select id="getRecordCountByPhone"
+		resultType="java.lang.Integer">
+		SELECT 
+			COUNT(id) 
+		FROM 
+			t_user 
+		WHERE 
+			phone=#{phone};
+	</select>
+	
+	<!-- 修改用户数据，
+		可用于修改个人资料，
+		也可用于修改密码 -->
+	<!-- Integer update(User user) -->
+	<update id="update" 
+		parameterType="cn.tedu.store.bean.User">
+		UPDATE 
+			t_user 
+		SET 
+			<if test="password != null">
+				password=#{password},
+			</if>
+
+			<if test="username != null">
+				username=#{username},
+			</if>
+			<if test="gender != null">
+				gender=#{gender},
+			</if>
+			<if test="phone != null">
+				phone=#{phone},
+			</if>
+			<if test="email != null">
+				email=#{email},
+			</if>
+
+			modified_user=#{modifiedUser},
+			modified_time=#{modifiedTime} 
+		WHERE 
+			id=#{id}
+	</update>
+
+</mapper>
+
+
+
+
+
+
+
